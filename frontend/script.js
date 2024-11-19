@@ -13,7 +13,7 @@ document.getElementById("uploadForm").addEventListener("submit", async function 
 
     try {
         // Make a POST request to the backend
-        const response = await fetch("https://block-blast-solver.onrender.com/solve", {
+        const response = await fetch("https://block-blast-solver-1.onrender.com/solve", {
             method: "POST",
             body: formData
         });
