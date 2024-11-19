@@ -6,7 +6,7 @@ from solver import solve_block_blast
 import io
 
 app = Flask(__name__)
-CORS(app, resources={r"/solve": {"origins": "*"}})  # Allow CORS for the /solve route
+CORS(app, resources={r"/*": {"origins": ["*"]}})  # Allow CORS for all routes
 
 @app.route('/solve', methods=['POST'])
 def solve():
@@ -58,6 +58,10 @@ def solve():
     except Exception as e:
         print(f"Unexpected error occurred: {e}")
         return jsonify({"error": "Unexpected error: " + str(e)}), 500
+
+@app.route('/health', methods=['GET'])
+def health():
+    return jsonify({"status": "healthy"}), 200
 
 def process_image(image):
     # Dummy function to simulate image processing
