@@ -1,9 +1,11 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import cv2
 import numpy as np
 from solver import solve_block_blast
 
 app = Flask(__name__)
+CORS(app)  # This line will allow cross-origin requests
 
 @app.route('/solve', methods=['POST'])
 def solve():
