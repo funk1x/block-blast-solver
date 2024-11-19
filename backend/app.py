@@ -30,19 +30,21 @@ def solve():
             print("Empty file content")
             return jsonify({"error": "Empty file content"}), 400
 
+        print("File read successfully, size: {} bytes".format(len(file_bytes)))
+
         image = cv2.imdecode(np.frombuffer(file_bytes, np.uint8), cv2.IMREAD_COLOR)
         if image is None:
             print("Failed to read image")
             return jsonify({"error": "Failed to read image"}), 500
 
-        print("File read successfully")
+        print("Image decoded successfully")
 
         board_state = process_image(image)
-        print("Image processed successfully")
+        print("Image processed successfully: board_state shape = {}".format(board_state.shape))
 
         # Solve for the best moves
         best_moves = solve_block_blast(board_state)
-        print("Solver executed successfully")
+        print("Solver executed successfully, moves: {}".format(best_moves))
 
         return jsonify({"moves": best_moves})
 
