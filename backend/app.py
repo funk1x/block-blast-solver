@@ -25,7 +25,12 @@ def solve():
             return jsonify({"error": "No file selected"}), 400
 
         # Read the uploaded file into memory
-        image = cv2.imdecode(np.frombuffer(file.read(), np.uint8), cv2.IMREAD_COLOR)
+        file_bytes = file.read()
+        if not file_bytes:
+            print("Empty file content")
+            return jsonify({"error": "Empty file content"}), 400
+
+        image = cv2.imdecode(np.frombuffer(file_bytes, np.uint8), cv2.IMREAD_COLOR)
         if image is None:
             print("Failed to read image")
             return jsonify({"error": "Failed to read image"}), 500
@@ -41,9 +46,18 @@ def solve():
 
         return jsonify({"moves": best_moves})
 
-    except (KeyError, ValueError, IOError) as e:
-        print(f"Error occurred: {e}")
-        return jsonify({"error": str(e)}), 500
+    except KeyError as e:
+        print(f"KeyError occurred: {e}")
+        return jsonify({"error": "KeyError: " + str(e)}), 400
+    except ValueError as e:
+        print(f"ValueError occurred: {e}")
+        return jsonify({"error": "ValueError: " + str(e)}), 400
+    except IOError as e:
+        print(f"IOError occurred: {e}")
+        return jsonify({"error": "IOError: " + str(e)}), 500
+    except Exception as e:
+        print(f"Unexpected error occurred: {e}")
+        return jsonify({"error": "Unexpected error: " + str(e)}), 500
 
 def process_image(image):
     # Dummy function to simulate image processing
@@ -52,4 +66,5 @@ def process_image(image):
     return np.zeros((10, 10))
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    print("Starting Flask server...")
+    app.run(host='0.0.0.0', port=5000, debug=True)
