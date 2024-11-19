@@ -4,15 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Block Blast Solver</title>
-    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Block Blast Solver</h1>
-    <form id="upload-form">
-        <input type="file" id="file-input" name="file" accept="image/*" required>
-        <button type="submit">Upload and Solve</button>
+    <h1>Upload Game Screenshot</h1>
+    <form id="uploadForm">
+        <input type="file" id="fileInput" name="file" accept="image/*" required>
+        <button type="submit">Submit</button>
     </form>
-    <div id="solution"></div>
+
+    <h2>Suggested Moves:</h2>
+    <pre id="result"></pre>
 
     <script src="script.js"></script>
 </body>
