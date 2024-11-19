@@ -3,9 +3,10 @@ from flask_cors import CORS
 import cv2
 import numpy as np
 from solver import solve_block_blast
+import io
 
 app = Flask(__name__)
-CORS(app)  # This line will allow cross-origin requests
+CORS(app, resources={r"/solve": {"origins": "*"}})  # Allow CORS for the /solve route
 
 @app.route('/solve', methods=['POST'])
 def solve():
@@ -23,15 +24,13 @@ def solve():
             print("No file selected")
             return jsonify({"error": "No file selected"}), 400
 
-        # Save the uploaded file
-        file.save('uploaded_image.png')
-        print("File saved successfully")
-
-        # Process the image
-        image = cv2.imread('uploaded_image.png')
+        # Read the uploaded file into memory
+        image = cv2.imdecode(np.frombuffer(file.read(), np.uint8), cv2.IMREAD_COLOR)
         if image is None:
             print("Failed to read image")
             return jsonify({"error": "Failed to read image"}), 500
+
+        print("File read successfully")
 
         board_state = process_image(image)
         print("Image processed successfully")
@@ -42,7 +41,7 @@ def solve():
 
         return jsonify({"moves": best_moves})
 
-    except Exception as e:
+    except (KeyError, ValueError, IOError) as e:
         print(f"Error occurred: {e}")
         return jsonify({"error": str(e)}), 500
 
